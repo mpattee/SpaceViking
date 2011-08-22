@@ -70,7 +70,7 @@
 - (void)applyJoystick:(SneakyJoystick *)aJoystick toNode:(CCNode *)tempNode forTimeDelta:(float)deltaTime
     {
     CGPoint scaledVelocity = ccpMult(aJoystick.velocity, 1024.0f);
-    CGPoint newPosition = ccp(tempNode.position.x + scaledVelocity.x * deltaTime, tempNode.position.y + scaledVelocity.y * deltaTime);
+    CGPoint newPosition = ccp(tempNode.position.x + scaledVelocity.x * deltaTime, tempNode.position.y);
     [tempNode setPosition:newPosition];
     
     if (jumpButton.active == YES)
@@ -97,9 +97,23 @@
         {
         CGSize screenSize = [[CCDirector sharedDirector] winSize];
         self.isTouchEnabled = YES;
-        vikingSprite = [CCSprite spriteWithFile:@"sv_anim_1.png"];
+//        vikingSprite = [CCSprite spriteWithFile:@"sv_anim_1.png"];
+        CCSpriteBatchNode *chapter2SpriteBatchNode = nil;
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            {[[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"scene1atlas.plist"];
+            chapter2SpriteBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"scene1atlas.png"];
+            }
+        else
+            {
+            [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"scene1atlasiPhone.plist"];
+            chapter2SpriteBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"scene1atlasiPhone.png"];
+            }
+        vikingSprite = [CCSprite spriteWithSpriteFrameName:@"sv_anim_1.png"];
+        [chapter2SpriteBatchNode addChild:vikingSprite];
+        [self addChild:chapter2SpriteBatchNode];
         [vikingSprite setPosition:CGPointMake(screenSize.width / 2, screenSize.height * 0.17f)];
-        [self addChild:vikingSprite];
+//        [self addChild:vikingSprite];
+
         [self initJoystickAndButtons];
         [self scheduleUpdate];
         if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad)
